@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('edit role')"></head>
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav"></nav>
+<section>
+    <div class="container wrapper">
+        <form th:action="@{/roles/${roleId}}" method="post" th:object="${role}">
+            <input type="hidden" th:field="*{id}"/>
+            <h2>Edit Role</h2>
+            <div class="edit-new-role">
+                <input type="text" th:field="*{name}" th:value="${role.name}"/>
+                <input type="submit" class="button" value="Update" style="width: 85px"/>
+            </div>
+        </form>
+        <form class="actions" th:action = "@{|/roles/${role.id}/delete|}" method="post">
+
+            <input type="submit" class="button" value="Delete" style="width: 85px"/>
+        </form>
+    </div>
+</section>
+</body>
+</html>

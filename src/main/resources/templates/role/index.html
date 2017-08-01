@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head('roles')"></head>
+<body>
+    <header th:replace="layout :: header"></header>
+    <nav th:replace="layout :: nav"></nav>
+    <section>
+        <div class="container wrapper">
+        <form th:action="@{/roles/add}" method="post" th:object="${role}">
+            <input type="hidden" th:field="*{id}"/>
+                <h2>Manage Roles</h2>
+                <div>
+                    <ul class="checkbox-list">
+                        <li th:each="role : ${roles}">
+                            <span class="primary" th:text="${role.name} ">Developer </span><a class="role-edit" th:href="|/roles/${role.id}/edit|">Edit</a>
+                        </li>
+                        <!--<li><span class="primary">Designer</span></li>-->
+                        <!--<li><span class="primary">QA</span></li>-->
+                        <!--<li><span class="primary">DevOps</span></li>-->
+                        <!--<li><span class="primary">Copywriter</span></li>-->
+                    </ul>
+                </div>
+                <div class="actions add-new-role">
+                    <input type="text" th:field="*{name}" placeholder="New Role..." style="width: 82%"/>
+                    <input type="submit" class="button" value="Add" style="width: 70px"/>
+                </div>
+        </form>
+        </div>
+    </section>
+</body>
+</html>
