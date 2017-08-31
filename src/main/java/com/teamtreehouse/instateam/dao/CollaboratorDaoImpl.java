@@ -1,6 +1,7 @@
 package com.teamtreehouse.instateam.dao;
 
 import com.teamtreehouse.instateam.model.Collaborator;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class CollaboratorDaoImpl implements CollaboratorDao {
     private SessionFactory sessionFactory;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Collaborator> findAll() {
         Session session = sessionFactory.openSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -31,6 +33,7 @@ public class CollaboratorDaoImpl implements CollaboratorDao {
     public Collaborator findById(Long id) {
         Session session = sessionFactory.openSession();
         Collaborator collaborator = session.get(Collaborator.class, id);
+        Hibernate.initialize(collaborator.getName());
         session.close();
         return collaborator;
     }

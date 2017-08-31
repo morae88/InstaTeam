@@ -9,4 +9,5 @@ public interface ProjectDao {
     Project findById(Long id);
     void save(Project project);
     void delete(Project project);
+    List<Integer> projectCollaborators(int id);
 }

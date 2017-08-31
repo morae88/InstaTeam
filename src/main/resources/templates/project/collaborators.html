@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('edit collaborator')"></head>
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav(projects)"></nav>
+<section>
+    <div class="container wrapper">
+        <form th:action="@{|/${projectId}/editCollaborators|}" method="post" th:object="${project}">
+            <input type="hidden" th:field="*{id}"/>
+            <label th:text="'Edit Collaborators: ' + ${project.name}">Edit Collaborators: Website Project</label>
+            <input type="hidden" th:field="*{name}"/>
+            <input type="hidden" th:field="*{description}"/>
+            <input type="hidden" th:field="*{status}"/>
+
+            <!--Project has no roles-->
+            <div class="list-item" th:if ="${project.rolesNeeded.size() == 0}">
+                <p>Please assign roles to this project before attempting to assign collaborators.</p>
+            </div>
+
+            <ul class="checkbox-list" th:if ="${project.rolesNeeded.size() != 0}">
+                <li th:each="role: ${project.rolesNeeded}"><span class="primary" th:text="${role.name}">Developer</span>
+                    <div class="custom-select">
+                        <span class="dropdown-arrow"></span>
+                        <select th:field="*{collaborators}">
+                            <option th:value="0" th:text="Name..."></option>
+                            <div th:each="collaborator: ${availableCollaborators}" >
+                                <div th:switch="${role.id}">
+                                    <div th:case="${collaborator.role.id}">
+                                        <option th:selected="${collaborators.contains(collaborator)}" th:value="${collaborator.id}" th:text="${collaborator.name}">Name
+                                            <!--<input type="hidden" th:field="*{collaborators}"/>-->
+                                        </option>
+                                    </div>
+                                    <div th:case="*">
+                                        <option th:if="${role.id != collaborator.role.id}" disabled="disabled" th:value="${collaborator}" th:text="${collaborator.name}">Name
+                                            <input type="hidden" th:field="*{collaborators}"/>
+                                        </option>
+                                    </div>
+                                </div>
+                            </div>
+                            <option th:value="0" th:text="Unassign"></option>
+                        </select>
+                    </div>
+                </li>
+            </ul>
+            <div class="actions" style="padding-left: 0px; padding-right:0px">
+                <input type="submit" value="Save" class="button" th:if ="${project.rolesNeeded.size() != 0}"/>
+                <a th:href="@{|/${projectId}|}" class="button button-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

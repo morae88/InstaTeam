@@ -3,29 +3,21 @@
 <head th:replace="layout :: head('collaborators')"></head>
 <body>
 <header th:replace="layout :: header"></header>
-<nav th:replace="layout :: nav"></nav>
+<nav th:replace="layout :: nav(projects)"></nav>
 <section>
     <div class="container wrapper">
+        <div th:replace="layout :: flash"></div>
         <div class="project-list">
-            <div class="project">
-                <h2><a href="project_detail.html">Website Project</a></h2>
-                <p>Design and build a custom website</p>
-                <span class="tag active">Active</span>
+            <!--Project has no roles-->
+            <div class="list-item" th:if ="${projects.size() == 0}">
+                <p>Please add a project by clicking [+ New Project] above.</p>
             </div>
-            <div class="project">
-                <h2><a href="#">App Project</a></h2>
-                <p>Design and build a web app</p>
-                <span class="tag active">Active</span>
-            </div>
-            <div class="project">
-                <h2><a href="#">Poster Design</a></h2>
-                <p>Create a poster design</p>
-                <span class="tag archived">Archived</span>
-            </div>
-            <div class="project">
-                <h2><a href="#">Mobile App</a></h2>
-                <p>Design and build a mobile app</p>
-                <span class="tag active">Active</span>
+            <div class="project" th:each="project: ${projects}">
+                <h2><a th:href="@{|/${project.id}|}" th:text="${project.name}">Project Name</a></h2>
+                <p th:text="${project.description}">Project Description</p>
+                <div th:each="status: ${statuses}">
+                    <span class="tag" th:if="${status.name == project.status}" th:classappend="${status.tag}" th:text="${project.status}">Active</span>
+                </div>
             </div>
         </div>
     </div>

@@ -1,6 +1,7 @@
 package com.teamtreehouse.instateam.dao;
 
 import com.teamtreehouse.instateam.model.Role;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class RoleDaoImpl implements RoleDao {
     public Role findById(Long id) {
         Session session = sessionFactory.openSession();
         Role role = session.get(Role.class, id);
+        Hibernate.initialize(role.getName());
         session.close();
         return role;
     }

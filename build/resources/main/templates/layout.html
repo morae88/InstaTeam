@@ -18,16 +18,17 @@
                 </div>
             </div>
         </header>
-        <nav th:fragment="nav">
+        <nav th:fragment="nav(selected)">
             <ul>
-                <li th:classappend="${#httpServletRequest.servletPath.equals('/') ? 'selected' : ''}"><a th:href="@{/}">Projects</a></li>
-                <li th:classappend="${#httpServletRequest.servletPath.equals('/collaborators') ? 'selected' : ''}"><a th:href="@{/collaborators}">Collaborators</a></li>
-                <li th:classappend="${#httpServletRequest.servletPath.equals('/roles') ? 'selected' : ''}"><a th:href="@{/roles}">Roles</a></li>
+                <li th:classappend="${selected}=='projects' ? selected : ''"><a th:href="@{/}">Projects</a></li>
+                <li th:classappend="${selected}=='collaborators' ? 'selected' : ''"><a th:href="@{/collaborators}">Collaborators</a></li>
+                <li th:classappend="${selected}=='roles' ? 'selected' : ''"><a th:href="@{/roles}">Roles</a></li>
             </ul>
         </nav>
+
         <div th:fragment="flash" th:if="${flash != null}" class="container">
-            <i class="right material-icons" data-close="">close</i>
-            <div th:classappend="${#strings.toLowerCase(flash.status)}" th:text="${flash.message}" class="flash"></div>
+            <div th:text="${flash.message}" class="flash" th:classappend="${#strings.toLowerCase(flash.status)}"></div>
         </div>
+
     </body>
 </html>

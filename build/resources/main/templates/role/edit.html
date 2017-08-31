@@ -3,20 +3,22 @@
 <head th:replace="layout :: head('edit role')"></head>
 <body>
 <header th:replace="layout :: header"></header>
-<nav th:replace="layout :: nav"></nav>
+<nav th:replace="layout :: nav(roles)"></nav>
 <section>
     <div class="container wrapper">
+        <div th:replace="layout :: flash"></div>
         <form th:action="@{/roles/${roleId}}" method="post" th:object="${role}">
             <input type="hidden" th:field="*{id}"/>
             <h2>Edit Role</h2>
-            <div class="edit-new-role">
+            <div class="edit-new-role" th:classappend="${#fields.hasErrors('name')}? 'error' : ''">
                 <input type="text" th:field="*{name}" th:value="${role.name}"/>
-                <input type="submit" class="button" value="Update" style="width: 85px"/>
+                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
             </div>
+            <input type="submit" class="button" value="Update" style="width: 85px"/>
         </form>
-        <form class="actions" th:action = "@{|/roles/${role.id}/delete|}" method="post">
-
-            <input type="submit" class="button" value="Delete" style="width: 85px"/>
+        <form th:classappend="${#fields.hasErrors('name')}? 'roleactions' : 'actions'" th:action = "@{|/roles/${role.id}/delete|}" method="post" th:object="${role}">
+            <input type="submit" class="button button-delete" value="Delete" style="width: 85px"/>
+            <a class="button button-secondary" th:href="@{/roles}">Cancel</a>
         </form>
     </div>
 </section>

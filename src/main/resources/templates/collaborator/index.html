@@ -3,63 +3,33 @@
 <head th:replace="layout :: head('collaborators')"></head>
 <body>
 <header th:replace="layout :: header"></header>
-<nav th:replace="layout :: nav"></nav>
+<nav th:replace="layout :: nav(collaborators)"></nav>
 <section>
     <div class="container wrapper">
-        <form>
+        <div th:replace="layout :: flash"></div>
+        <form th:action="@{collaborators/add}" method="post" th:object="${collaborator}">
             <h2>Manage Collaborators</h2>
             <ul class="checkbox-list">
-                <li>
-                    <span class="primary">Michael Pemulius</span>
-                    <div class="custom-select">
-                        <span class="dropdown-arrow"></span>
-                        <select>
-                            <option value="#" class="selected">Designer</option>
-                            <option value="#">Developer</option>
-                            <option value="#">QA</option>
-                            <option value="#">DevOps</option>
-                        </select>
-                    </div>
-                </li>
-                <li>
-                    <span class="primary">Don Gately</span>
-                    <div class="custom-select">
-                        <span class="dropdown-arrow"></span>
-                        <select>
-                            <option value="#">Designer</option>
-                            <option value="#" class="selected">Developer</option>
-                            <option value="#">QA</option>
-                            <option value="#">DevOps</option>
-                        </select>
-                    </div>
-                </li>
-                <li>
-                    <span class="primary">Joelle Van Dyne</span>
-                    <div class="custom-select">
-                        <span class="dropdown-arrow"></span>
-                        <select>
-                            <option value="#">Designer</option>
-                            <option value="#">Developer</option>
-                            <option value="#" class="selected">QA</option>
-                            <option value="#">DevOps</option>
-                        </select>
-                    </div>
+                <li th:each="collaborator : ${collaborators}">
+                    <span class="primary" th:text="${collaborator.name}">Name</span>
+                    <span th:text="${collaborator.role.name}"> Role</span>
+                    <span class="secondary"> <a class="button" style="text-align: center; float: none" th:href="@{|/collaborators/${collaborator.id}/edit|}">Edit</a></span>
                 </li>
             </ul>
-            <div class="actions add-new-collaborator">
-                <input type="text" placeholder="Name..."/>
+            <div class="actions add-new-collaborator" style="padding-left: 0px; padding-right: 0px;">
+                <input type="text" th:field="*{name}" placeholder="Name..."/>
                 <div class="custom-select">
                     <span class="dropdown-arrow"></span>
-                    <select>
-                        <option value="#" class="disabled selected">Role...</option>
-                        <option value="#">Developer</option>
-                        <option value="#">Designer</option>
-                        <option value="#">QA</option>
-                        <option value="#">DevOps</option>
-                        <option value="#">Copywriter</option>
+                    <select th:field="*{role.id}">
+                        <option value="#" selected="selected" disabled="disabled">Role...</option>
+                        <div th:each="role : ${roles}">
+                            <option th:value="${role.id}" th:text="${role.name}">Developer
+                                <input type="hidden" th:field="*{role.id}"/>
+                            </option>
+                        </div>
                     </select>
                 </div>
-                <a class="button" href="#">Add</a>
+                <input type="submit" class="button" value="Add" style="width: 60px"/>
             </div>
         </form>
     </div>

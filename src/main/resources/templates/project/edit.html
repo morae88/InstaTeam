@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout :: head('edit collaborator')"></head>
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav(projects)"></nav>
+<section>
+    <div class="container wrapper">
+        <form th:action="@{${action}}" method="post" th:object="${project}">
+            <input type="hidden" th:field="*{id}"/>
+            <div>
+                <label for="project_name"> Project Name:</label>
+                <input type="text" id="project_name" th:field="*{name}" name="project_name" th:value="*{name}"/>
+            </div>
+            <div>
+                <label for="project_description">Project Description:</label>
+                <textarea rows="4" name="project_description" id="project_description" th:field="*{description}" th:text="*{description}"></textarea>
+            </div>
+            <div>
+                <label for="project_status">Project Status:</label>
+                <div class="custom-select">
+                    <span class="dropdown-arrow"></span>
+                    <select name="project_status" id="project_status" th:field="*{status}">
+                        <option value="" disabled="disabled">Status</option>
+                        <option th:each="status: ${statuses}" th:value="${status.name}" th:text="${status.name}">Active</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <label for="project_roles">Project Roles:</label>
+                <ul class="checkbox-list" id="project_roles">
+                    <li th:each="role: ${roles}">
+                        <input type="checkbox" th:value="${role.id}"  th:field="*{rolesNeeded}"/>
+                        <span class="primary" th:text="${role.name}">Role Name</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="actions" style="padding-left: 0px; padding-right: 0px;">
+                <input type="submit" value="Save" class="button"/>
+                <a class="button button-secondary" href="/">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

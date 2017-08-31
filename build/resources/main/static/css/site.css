@@ -102,7 +102,7 @@ nav ul li.selected a {
 	background: transparent;
 	border-color: #e1e0e0;
 	color: #747372;
-	margin-left: 5px;
+	float: right;
 }
 .button.icon-left {
 	padding-left: 38px;
@@ -114,6 +114,10 @@ nav ul li.selected a {
 }
 .button:focus {
 	outline: 0;
+}
+.button.button-delete {
+    background: #ac4343;
+    border-color: #ac4343;
 }
 
 
@@ -187,6 +191,9 @@ strong {
 .tag.active {
 	background: #72c38d;
 }
+.tag.notstarted {
+    background: #f4a742;
+}
 .tag.archived {
 	background: #bbbab9;
 }
@@ -200,6 +207,14 @@ strong {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
+
+.roleactions {
+	padding: 0px 35px 65px 35px;
+	background: #FFF;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}
+
 .actions:after {
 	content: "";
   	display: table;
@@ -383,9 +398,10 @@ form .checkbox-list .custom-select {
 	margin-top: -13px;
 	float: right;
 }
-form .actions {
+form .actions .roleactions{
 	margin: 0 -35px;
 }
+
 form .add-new-role input {
 	width: calc(100% - 100px);
 	margin: 0 10px 10px 0;
@@ -403,18 +419,72 @@ form .add-new-collaborator input {
 	margin: 0 10px 10px 0;
 	float: left;
 }
-form .add-new-collaborator .custom-select {
-	width: calc(50% - 40px);
+
+form .edit-new-collaborator input {
+	width: calc(50% - 50px);
 	margin: 0 10px 10px 0;
 	float: left;
 }
+
+form .add-new-collaborator .custom-select,
+form .edit-new-collaborator .custom-select {
+	width: calc(48% - 40px);
+	margin: 0 10px 10px 0;
+	float: left;
+}
+
 form .add-new-role .button,
-form .add-new-collaborator .button {
+form .add-new-collaborator .button,
+form .edit-new-role .button,
+form .edit-new-collaborator .button {
 	width: 30px;
 	text-align: center;
 	float: left;
-	margin: 0;
 }
+
+.error input {
+    border-width: 2px;
+    border-color: #ac4343;
+    border-bottom: none;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.error .error-message {
+    margin-bottom: 5px;
+    border: 2px solid #ac4343;
+    border-radius: 6px;
+    background-color: #ac4343;
+    color: rgb(254,251,251);
+    padding: 10px;
+    margin-right: 2px;
+}
+
+.error-role-index .error-message {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border: 2px solid #ac4343;
+    border-radius: 6px;
+    background-color: #ac4343;
+    color: rgb(254,251,251);
+    padding: 10px;
+}
+
+div .flash {
+    margin-bottom: -1rem;
+    padding: 1rem 35px 0 35px;
+    font-size: 1.1rem;
+}
+
+.flash.success {
+    color: #7f9e40;
+
+}
+
+.flash.failure {
+    color: #ac4343;
+}
+
 
 
 

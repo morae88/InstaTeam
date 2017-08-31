@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="layout :: head('project detail')"></head>
+<body>
+<header th:replace="layout :: header"></header>
+<nav th:replace="layout :: nav(projects)"></nav>
+<section>
+    <div class="container wrapper">
+        <div class="project-list single">
+            <div class="project">
+                <h2 th:text="${project.name}">Project Name</h2>
+                <p th:text="${project.description}">Project Description</p>
+                <span class="tag" th:classappend="${project.status}" th:text="${project.status}">Status</span>
+            </div>
+            <div class="roles-collaborators">
+                <h3>Roles &amp; Collaborators</h3>
+
+                <!--Project has no roles-->
+                <div class="list-item" th:if ="${project.rolesNeeded.size() == 0}">
+                    <p>No roles have been assigned to this project.</p>
+                </div>
+
+                <!--Project has roles but no collaborators-->
+                <div th:if="${project.rolesNeeded.size() != 0  and project.collaborators.size() == 0}">
+                    <div class="list-item" th:each="role : ${project.rolesNeeded}">
+                        <span class="primary" th:text="${role.name}">Role</span>
+                        <span class="secondary">[Unassigned]</span>
+                    </div>
+                </div>
+
+                <!--Collaborators Assigned-->
+                <div th:if="${project.collaborators.size() != 0}">
+                    <div class="list-item" th:each="collaborator : ${project.collaborators}">
+                        <span class="primary" th:text="${collaborator.role.name}">Role name</span>
+                        <span class="secondary" th:text="${collaborator.name}">Collaborator name</span>
+                    </div>
+                    <div class="list-item" th:each="role: ${unassigned}">
+                        <span class="primary" th:text="${role.name}">Role</span>
+                        <span class="secondary">[Unassigned]</span>
+                    </div>
+                </div>
+                <form class="actions" th:action = "@{|/${projectId}/delete|}" method="post">
+                    <a class="button" th:href="@{|/${projectId}/edit|}">Edit Project</a>
+                    <a class="button" th:href="@{|/${projectId}/collaborators|}">Edit Collaborators</a>
+                    <input type="submit" class="button button-delete" value="Delete" style="width: 85px"/>
+                    <a class="button button-secondary" th:href="@{/}">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

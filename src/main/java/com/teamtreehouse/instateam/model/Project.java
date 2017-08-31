@@ -1,11 +1,21 @@
 package com.teamtreehouse.instateam.model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.validation.constraints.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,15 +23,25 @@ public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column
+    @NotNull
     private String name;
+
+    @Column
+    @NotNull
     private String description;
+
+    @Column
     private String status;
 
-    @ManyToMany
-    private List<Role> rolesNeeded;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Role> rolesNeeded = new ArrayList<>();
 
-    @ManyToMany
-    private List<Collaborator> collaborators;
+    @ManyToMany(cascade = {CascadeType.ALL})
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Collaborator> collaborators = new ArrayList<>();
 
     public Project() {
     }
@@ -72,5 +92,39 @@ public class Project {
 
     public void setCollaborators(List<Collaborator> collaborators) {
         this.collaborators = collaborators;
+    }
+
+    public void addRole(Role role) {
+        rolesNeeded.add(role);
+    }
+
+    public void addCollaborator(Collaborator collaborator) {
+        collaborators.add(collaborator);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Project project = (Project) o;
+
+        if (id != null ? !id.equals(project.id) : project.id != null) return false;
+        if (name != null ? !name.equals(project.name) : project.name != null) return false;
+        if (description != null ? !description.equals(project.description) : project.description != null) return false;
+        if (status != null ? !status.equals(project.status) : project.status != null) return false;
+        if (rolesNeeded != null ? !rolesNeeded.equals(project.rolesNeeded) : project.rolesNeeded != null) return false;
+        return collaborators != null ? collaborators.equals(project.collaborators) : project.collaborators == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (rolesNeeded != null ? rolesNeeded.hashCode() : 0);
+        result = 31 * result + (collaborators != null ? collaborators.hashCode() : 0);
+        return result;
     }
 }

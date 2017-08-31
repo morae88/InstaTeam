@@ -1,6 +1,10 @@
 package com.teamtreehouse.instateam.web.controller;
 
+import com.teamtreehouse.instateam.model.Collaborator;
+import com.teamtreehouse.instateam.model.Project;
 import com.teamtreehouse.instateam.model.Role;
+import com.teamtreehouse.instateam.service.CollaboratorService;
+import com.teamtreehouse.instateam.service.ProjectService;
 import com.teamtreehouse.instateam.service.RoleService;
 import com.teamtreehouse.instateam.web.FlashMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +24,12 @@ public class RoleController {
     @Autowired
     private RoleService roleService;
 
+    @Autowired
+    private CollaboratorService collaboratorService;
+
+    @Autowired
+    private ProjectService projectService;
+
     //Index of all roles
     @RequestMapping("/roles")
     @SuppressWarnings("unchecked")
@@ -35,9 +45,17 @@ public class RoleController {
 
     // Add a role
     @RequestMapping(value = "/roles/add", method = RequestMethod.POST)
-    public String addRole(Role role, Model model) {
+    public String addRole(@Valid Role role, BindingResult result, RedirectAttributes redirectAttributes) {
 
+        if(result.hasErrors()){
+            redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.role", result);
+            redirectAttributes.addFlashAttribute("role", role);
+
+            return "redirect:/roles";
+        }
         roleService.save(role);
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Role successfully added!", FlashMessage.Status.SUCCESS));
 
         // TODO: Redirect browser to /roles
         return "redirect:/roles";
@@ -50,6 +68,7 @@ public class RoleController {
             model.addAttribute("role", roleService.findById(roleId));
         }
 
+
         return "role/edit";
     }
 
@@ -59,9 +78,12 @@ public class RoleController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.role", result);
             redirectAttributes.addFlashAttribute("role", role);
 
-            return String.format("redirect:/roles/%s",role.getId());
+            return String.format("redirect:/roles/%s/edit",role.getId());
         }
+
         roleService.save(role);
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Role successfully updated!", FlashMessage.Status.SUCCESS));
 
         return "redirect:/roles";
     }
@@ -69,8 +91,26 @@ public class RoleController {
     @RequestMapping(value = "roles/{roleId}/delete", method = RequestMethod.POST)
     public String deleteRole(@PathVariable Long roleId, RedirectAttributes redirectAttributes) {
         Role role = roleService.findById(roleId);
+        List<Collaborator> collaborators = collaboratorService.findAll();
+        List<Project> projects = projectService.findAll();
+
+        for (Collaborator collaborator: collaborators) {
+            if(collaborator.getRole().getId() == roleId) {
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Cannot delete. Role is assigned to a collaborator.", FlashMessage.Status.FAILURE));
+                return String.format("redirect:/roles/%s/edit", roleId);
+            }
+        }
+
+        for (Project project: projects) {
+            if(project.getRolesNeeded().contains(role)) {
+                redirectAttributes.addFlashAttribute("flash", new FlashMessage("Cannot delete. Role is needed for a project.", FlashMessage.Status.FAILURE));
+                return String.format("redirect:/roles/%s/edit", roleId);
+            }
+        }
 
         roleService.delete(role);
+
+        redirectAttributes.addFlashAttribute("flash", new FlashMessage("Role successfully deleted!", FlashMessage.Status.SUCCESS));
 
         return "redirect:/roles";
     }

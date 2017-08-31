@@ -1,10 +1,13 @@
 package com.teamtreehouse.instateam.dao;
 
 import com.teamtreehouse.instateam.model.Project;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -16,6 +19,7 @@ public class ProjectDaoImpl implements ProjectDao {
     private SessionFactory sessionFactory;
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Project> findAll() {
         Session session = sessionFactory.openSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
@@ -32,6 +36,9 @@ public class ProjectDaoImpl implements ProjectDao {
 
         Session session = sessionFactory.openSession();
         Project project = session.get(Project.class, id);
+        Hibernate.initialize(project.getName());
+        Hibernate.initialize(project.getCollaborators());
+        Hibernate.initialize(project.getRolesNeeded());
         session.close();
         return project;
 
@@ -54,4 +61,14 @@ public class ProjectDaoImpl implements ProjectDao {
         session.getTransaction().commit();
         session.close();
     }
+
+    @Override
+    public List<Integer> projectCollaborators(int id) {
+        Session session = sessionFactory.openSession();
+        String q = String.format("FROM PROJECT_ROLE WHERE PROJECT WHERE PROJECT_ID = %d", id);
+        Query query = session.createQuery(q);
+        List<Integer> roleIds = query.list();
+        return roleIds;
+    }
+
 }

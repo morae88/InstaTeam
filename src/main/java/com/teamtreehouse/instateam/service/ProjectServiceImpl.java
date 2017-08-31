@@ -30,4 +30,9 @@ public class ProjectServiceImpl implements ProjectService {
     public void delete(Project project) {
         projectDao.delete(project);
     }
+
+    @Override
+    public List<Integer> projectCollaborators(int id) {
+        return projectDao.projectCollaborators(id);
+    }
 }
