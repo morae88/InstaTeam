@@ -10,8 +10,11 @@
         <form th:action="@{/collaborators/${collaboratorId}}" method="post" th:object="${collaborator}">
             <input type="hidden" th:field="*{id}"/>
             <h2>Edit Collaborator</h2>
+            <div th:classappend="${#fields.hasErrors('name')}? 'error' : ''">
+                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
             <div class="add-new-collaborator">
-                <input type="text" th:field="*{name}" placeholder="Name..."/>
+                <input type="text" th:field="*{name}" th:value="${collaborator.name}" placeholder="Name..."/>
                 <div class="custom-select">
                     <span class="dropdown-arrow"></span>
 

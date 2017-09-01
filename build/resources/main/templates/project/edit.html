@@ -10,11 +10,18 @@
             <input type="hidden" th:field="*{id}"/>
             <div>
                 <label for="project_name"> Project Name:</label>
-                <input type="text" id="project_name" th:field="*{name}" name="project_name" th:value="*{name}"/>
+                <div th:classappend="${#fields.hasErrors('name')}? 'error' : ''">
+                    <input type="text" id="project_name" th:field="*{name}" name="project_name" th:value="*{name}" />
+                    <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="margin-top: -35px; margin-bottom: 30px;"></div>
+                </div>
             </div>
             <div>
+
                 <label for="project_description">Project Description:</label>
-                <textarea rows="4" name="project_description" id="project_description" th:field="*{description}" th:text="*{description}"></textarea>
+                <div th:classappend="${#fields.hasErrors('description')}? 'error' : ''">
+                    <textarea rows="4" name="project_description" id="project_description" th:field="*{description}" th:text="*{description}"></textarea>
+                    <div class="error-message" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="margin-top: -35px; margin-bottom: 30px;"></div>
+                </div>
             </div>
             <div>
                 <label for="project_status">Project Status:</label>

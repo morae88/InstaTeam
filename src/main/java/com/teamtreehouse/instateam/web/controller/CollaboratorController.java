@@ -81,7 +81,7 @@ public class CollaboratorController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.collaborator", result);
             redirectAttributes.addFlashAttribute("collaborator", collaborator);
 
-            return String.format("redirect:/collaborators/%s", collaborator.getId());
+            return String.format("redirect:/collaborators/", collaborator.getId());
         }
         collaboratorService.save(collaborator);
 

@@ -20,7 +20,7 @@ public class Role {
 
     @Column
     @NotNull
-    @Size(min = 2, max = 50)
+    @Size(min = 2, max = 50, message = "Please enter a valid role name between {min} and {max} characters. You entered [${validatedValue}]")
     private String name;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "role")

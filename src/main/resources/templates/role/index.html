@@ -8,7 +8,6 @@
     <section>
         <div class="container wrapper">
             <div th:replace="layout :: flash"></div>
-
             <form th:action="@{/roles/add}" method="post" th:object="${role}">
             <input type="hidden" th:field="*{id}"/>
                 <h2>Manage Roles</h2>
@@ -20,9 +19,13 @@
                     </ul>
                 </div>
                 <div class="actions add-new-role" style="padding-left: 0; padding-right: 0;">
-                    <input type="text" th:field="*{name}" placeholder="New Role..." style="width: 80%"/>
+                    <div th:classappend="${#fields.hasErrors('name')}? 'error' : ''">
+                        <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                        <input type="text" th:field="*{name}" placeholder="New Role..." style="width: 80%"/>
+                    </div>
                     <input type="submit" class="button" value="Add" style="width: 70px"/>
                 </div>
+
         </form>
         </div>
     </section>

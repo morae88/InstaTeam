@@ -9,6 +9,9 @@
         <div th:replace="layout :: flash"></div>
         <form th:action="@{collaborators/add}" method="post" th:object="${collaborator}">
             <h2>Manage Collaborators</h2>
+            <div th:if="${#fields.hasErrors('name')}" class ="error" >
+                <div class="error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
             <ul class="checkbox-list">
                 <li th:each="collaborator : ${collaborators}">
                     <span class="primary" th:text="${collaborator.name}">Name</span>
@@ -16,12 +19,11 @@
                     <span class="secondary"> <a class="button" style="text-align: center; float: none" th:href="@{|/collaborators/${collaborator.id}/edit|}">Edit</a></span>
                 </li>
             </ul>
-            <div class="actions add-new-collaborator" style="padding-left: 0px; padding-right: 0px;">
-                <input type="text" th:field="*{name}" placeholder="Name..."/>
+            <div class="actions add-new-collaborator" style="padding-left: 0px; padding-right: 0px;" >
+                    <input type="text" th:field="*{name}" placeholder="Name..."/>
                 <div class="custom-select">
                     <span class="dropdown-arrow"></span>
                     <select th:field="*{role.id}">
-                        <option value="#" selected="selected" disabled="disabled">Role...</option>
                         <div th:each="role : ${roles}">
                             <option th:value="${role.id}" th:text="${role.name}">Developer
                                 <input type="hidden" th:field="*{role.id}"/>

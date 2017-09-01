@@ -14,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +27,12 @@ public class Project {
 
     @Column
     @NotNull
+    @Size(min = 1, max = 100, message = "Please enter a valid project name between {min} and {max} characters. You entered [${validatedValue}]")
     private String name;
 
     @Column
     @NotNull
+    @Size(min = 1, max = 1000, message = "Please enter a valid project description between {min} and {max} characters. You entered [${validatedValue}]")
     private String description;
 
     @Column

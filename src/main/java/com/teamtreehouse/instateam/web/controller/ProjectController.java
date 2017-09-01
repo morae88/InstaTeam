@@ -75,7 +75,7 @@ public class ProjectController {
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.project", result);
             redirectAttributes.addFlashAttribute("project", project);
 
-            return "redirect:/";
+            return "redirect:/projects/add";
         }
         projectService.save(project);
 
